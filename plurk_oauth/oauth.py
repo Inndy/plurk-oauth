@@ -50,7 +50,7 @@ class PlurkOAuth:
             verifier = self.get_verifier()
             self.get_access_token(verifier)
 
-    def request(self, url, params={}, data={}, files={}):
+    def request(self, url, params={}, data={}, files={}, as_json=True):
         """ Return: status code, json object, status reason """
 
         # Setup
@@ -82,12 +82,7 @@ class PlurkOAuth:
             for name, ofile in req_files.items():
                  ofile.close()
 
-        #print(r.text)
-
-        try:
-            return r.status_code, r.json(), r.reason
-        except:
-            return r.status_code, r.text, r.reason
+        return r.status_code, (r.json() if as_json else r.text), r.reason
 
     def get_consumer_token(self):
 
