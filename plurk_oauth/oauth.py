@@ -50,7 +50,7 @@ class PlurkOAuth:
             verifier = self.get_verifier()
             self.get_access_token(verifier)
 
-    def request(self, url, params={}, data={}, files={}, as_json=True):
+    def request(self, url, data={}, files={}, as_json=True):
         """ Return: status code, json object, status reason """
 
         # Setup
@@ -123,7 +123,7 @@ class PlurkOAuth:
             return
 
         # Get Token Key/Secret
-        status, content, reason = self.request(self.request_token_url)
+        status, content, reason = self.request(self.request_token_url, as_json=False)
         if str(status) != '200':
             # TODO Declare an exception
             raise Exception(reason)
@@ -159,7 +159,7 @@ class PlurkOAuth:
         status, content, reason = self.request(self.access_token_url, data={
             'oauth_token_secret': self.oauth_token['oauth_token_secret'],
             'oauth_verifier': verifier,
-        })
+        }, as_json=False)
         if str(status) != '200':
             # TODO Declare an exception
             raise Exception(reason)

@@ -44,9 +44,9 @@ class PlurkAPI:
         self._oauth.authorize(access_key, access_secret)
         self._authorized = True
 
-    def callAPI(self, path, options={}, files={}):
+    def callAPI(self, path, data={}, files={}):
         self._error['code'], self._json, self._error['reason'] = self._oauth.request(
-            path, None, options, files)
+            path, data=data, files=files)
         self._error['content'] = self._json
         if self._error['code'] != 200:
             return None
