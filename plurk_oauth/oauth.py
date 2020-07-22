@@ -15,6 +15,9 @@ else:
     from urllib import urlencode
     input = raw_input
 
+last_request = None
+last_response = None
+
 
 class PlurkOAuth:
     def __init__(self, customer_key=None, customer_secret=None):
@@ -65,12 +68,17 @@ class PlurkOAuth:
                 for (name, fpath) in files.items():
                     req_files[name] = open(fpath, 'rb')
 
-            r = requests.post(
-                self.base_url + url,
+            args = dict(
+                url=self.base_url + url,
                 headers=req.to_header(),
                 data=data,
                 files=req_files if req_files else None
-            )
+                )
+            global last_request
+            last_request = args
+            r = requests.post(**args)
+            global last_response
+            last_response = r
 
         except requests.RequestException as ex:
             print >> sys.stderr, ex
